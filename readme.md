@@ -9,6 +9,9 @@ The app will:
  - Provide the next action to do
  - Continue to ask which tasks you prefer, then provide the next action
 
+Out of scope (for now):
+ - writing anything to Todoist - tasks will have to be manually checked off in both systems
+
 # 0.1
 
 Plan to:
