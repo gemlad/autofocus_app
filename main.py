@@ -21,6 +21,9 @@ def compare_tasks(tasks):
             if choice in ("1", "2"):
                 break
             print("Please enter 1 or 2")
+        if choice == "2":
+            task.dotted = True
+            comparitor = task.id
 
 
 def main():
@@ -39,7 +42,9 @@ def main():
     compare_tasks(tasks)    
 
     print(tasks)
-
+    for task in tasks:
+        if task.dotted == True:
+            print(task.name)
 
 
 
