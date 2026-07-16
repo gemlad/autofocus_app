@@ -57,8 +57,10 @@ def task_complete(tasks):
         print("Please enter y or n")
     if choice == "y":
         final_dotted_task.is_completed = True
-        return final_dotted_task
-    else:
+        return final_dotted_task 
+        # next_unflagged_task = tasks[tasks.index(final_dotted_task)+1]
+        # return next_unflagged_task #Should go in compare function
+    else: # needs more feature! Currently does not return anything
         final_dotted_task = None
         print("App terminated - do the task then run again!")
 
@@ -80,8 +82,8 @@ def main():
         if task.is_dotted == True:
             print(task.name)
 
-    last_completed = task_complete(tasks)
-    print(last_completed) #testing
+    completed_task = task_complete(tasks)
+    print("Completed task is ", completed_task) #testing
 
     print(tasks)  #testing
 
