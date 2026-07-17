@@ -26,7 +26,7 @@ def find_previous_dot_task(tasks, latest_completed_task=None):
     if latest_completed_task.is_completed == False:
         raise ValueError(f"{latest_completed_task.name} has not been completed.")
 
-    for task in tasks[latest_completed_task.index -1::-1]:
+    for task in tasks[tasks.index(latest_completed_task) -1::-1]:
         if task.is_completed == True:
             continue
         elif task.is_completed == False and task.is_dotted == False:
@@ -49,7 +49,7 @@ def find_resume_from_task(tasks, latest_completed_task = None):
     if latest_completed_task.is_completed == False:
         raise ValueError(f"{latest_completed_task.name} has not been completed.")
 
-    for task in tasks[latest_completed_task.index:]:
+    for task in tasks[tasks.index(latest_completed_task):]:
         if task.is_completed == False and task.is_dotted == False:
             resume_from_task = task
             return(resume_from_task)
@@ -77,7 +77,7 @@ def task_compare(tasks, previous_dot_task = None, resume_from_task = None):
     if resume_from_task == None:
         resume_from_task = tasks[0]
     # TODO: create a new task list of 'suitable tasks'
-    for task in tasks[resume_from_task.index:]:
+    for task in tasks[tasks.index(resume_from_task):]:
         if task == previous_dot_task:
             continue
         if task.is_completed == True:
