@@ -60,7 +60,7 @@ def find_resume_from_task(tasks, latest_completed_task = None):
         else:
             raise ValueError(f"Task {task.name} metadata corrupted")
         
-def task_compare(tasks, comparator_task = None):
+def task_compare(tasks, previous_dot_task = None, resume_from_task = None):
     """ Compares a comparator task with the next suitable task.
         The comparator and next suitable task will change.
 
@@ -71,18 +71,20 @@ def task_compare(tasks, comparator_task = None):
     # resume_from_task  - the task after latest_completed_task in `tasks`; where scanning resumes
     # If previous_dot_task is None (no earlier dot), restart from the top instead.
     print("Running task_compare...")
-    if comparator_task == None:
-        comparator_task = tasks[0]
-    comparator_task.is_dotted = True
+    if previous_dot_task == None:
+        previous_dot_task = tasks[0]
+    previous_dot_task.is_dotted = True
+    if resume_from_task == None:
+        resume_from_task = tasks[0]
     # TODO: create a new task list of 'suitable tasks'
-    for task in tasks:
-        if task == comparator_task:
+    for task in tasks[resume_from_task.index:]:
+        if task == previous_dot_task:
             continue
         if task.is_completed == True:
             continue
         while True:
             choice = input(
-                f"Would you rather: 1. {comparator_task.name}, "
+                f"Would you rather: 1. {previous_dot_task.name}, "
                 f"or: 2. {task.name}?"
                 )
             if choice in ("1", "2"):
@@ -90,7 +92,7 @@ def task_compare(tasks, comparator_task = None):
             print("Please enter 1 or 2")
         if choice == "2":
             task.is_dotted = True
-            comparator_task = task
+            previous_dot_task = task
 
 
 def task_complete(tasks):
