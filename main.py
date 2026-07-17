@@ -78,6 +78,21 @@ def find_previous_dot_task(tasks, latest_completed_task=None):
     if latest_completed_task == None:
         # TODO: sort out edge case
         raise ValueError("No latest_completed_task")
+    if latest_completed_task.is_completed == False:
+        raise ValueError(f"{latest_completed_task.name} has not been completed.")
+    # previous dot_task is the dotted task before the last completed task
+    for task in tasks[latest_completed_task.index -1::-1]:
+        if task.is_completed == True:
+            continue
+        elif task.is_completed == False and task.is_dotted == False:
+            continue
+        elif task.is_completed == False and task.is_dotted == True:
+            previous_dot_task = task
+            return(previous_dot_task)
+        else:
+            raise ValueError(f"Task {task.name} metadata corrupted")
+    
+
     
 
 
