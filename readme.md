@@ -12,11 +12,8 @@ The app will:
 Out of scope (for now):
  - writing anything to Todoist - tasks will have to be manually checked off in both systems
 
-# 0.1
+# 0.1 RELEASE
+ - Implements autofocus algorithm with a list of dummy tasks
 
-Plan to:
- - Implement autofocus algorithm with a list of dummy tasks
-
-Out of scope:
- - API calls
- - Saving states 
+# Future plans:
+See project milestones
