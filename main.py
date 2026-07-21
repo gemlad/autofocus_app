@@ -9,6 +9,9 @@ class Task:
 
 tasks: list[Task] = []
 
+def quit_app():
+    print("Autofocus App terminated.")
+
 def find_task(tasks, task_id):
     task = next((t for t in tasks if t.id == task_id), None)
     if task is None:
@@ -76,7 +79,6 @@ def task_compare(tasks, previous_dot_task = None, resume_from_task = None):
     previous_dot_task.is_dotted = True
     if resume_from_task == None:
         resume_from_task = tasks[0]
-    # TODO: create a new task list of 'suitable tasks'
     for task in tasks[tasks.index(resume_from_task):]:
         if task == previous_dot_task:
             continue
@@ -121,9 +123,8 @@ def task_complete(tasks):
         latest_completed_task = latest_dot_task
         return latest_completed_task
 
-    else: # needs more feature! Currently does not return anything
-        latest_dot_task = None
-        print("App terminated - do the task then run again!")
+    # else: # needs more feature! Currently does not return anything
+    #     print("App terminated - do the task then run again!")
 
 
 
@@ -132,15 +133,33 @@ def task_complete(tasks):
 
 def main():
     print("AutoFocus App")
+
+    # Load json tasks
+
+    # Poll Todoist - compare, add new tasks to app task list, update completed tasks in app task list
+    # Compare tasks
+    # Show task to complete
+    # Complete task
+    # Update todoist
+
+    #rerun from poll Todoist.
+
+    # Any time: save (including update Todoist) and quit, save without quit, or quit without saving
+
     tasks: list[Task] = [
     Task("Wrestle a bear",id=23),
-    Task("Write a review of War & Peace",id=54),
+    Task("Write a review of North & South",id=54),
     Task("Solve world peace",id=654),
     Task("Have a nap",id=654654),
     Task("Become a mighty pirate",id=4987)    
     ]
  
-    task_compare(tasks)    
+    
+    latest_completed_task = None
+    previous_dot_task = find_previous_dot_task(tasks, latest_completed_task)
+    resume_from_task = find_resume_from_task(tasks, latest_completed_task)
+    task_compare(tasks, previous_dot_task = previous_dot_task, resume_from_task = resume_from_task)
+    latest_completed_task = task_complete(tasks)
 
 ## Testing code
     for task in tasks:
