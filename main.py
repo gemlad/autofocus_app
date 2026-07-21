@@ -26,7 +26,7 @@ def get_input(prompt):
         return get_input(prompt)
     return response
 
-def quit_no_save():
+def quit_no_save(): # O says: quit(save = True) might be a good implementation
     while True:
         choice = input(
             f"Are you sure you want to quit without saving?"
