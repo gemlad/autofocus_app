@@ -141,11 +141,13 @@ def task_complete(tasks):
         if task.is_dotted == True and task.is_completed == False:
             dotted_tasks.append(task)
     while len(dotted_tasks) > 0:
-        latest_dot_task = find_task(tasks, dotted_tasks[len(dotted_tasks)-1].id)
+        # latest_dot_task = find_task(tasks, dotted_tasks[len(dotted_tasks)-1].id)
+        latest_dot_task = dotted_tasks[len(dotted_tasks)-1]
         while True:
             choice = get_input(
                 f"Your current task is {latest_dot_task.name}. Have you "
                 f"completed it? (y)es or (n)o. (Press 'q' to quit)\n"
+                f"(Note - this doesn't interface with Todoist yet)"
                 ).strip().lower()
             if choice in ("y", "n"):
                 break
