@@ -141,11 +141,13 @@ def task_complete(tasks):
         if task.is_dotted == True and task.is_completed == False:
             dotted_tasks.append(task)
     while len(dotted_tasks) > 0:
-        latest_dot_task = find_task(tasks, dotted_tasks[len(dotted_tasks)-1].id)
+        # latest_dot_task = find_task(tasks, dotted_tasks[len(dotted_tasks)-1].id)
+        latest_dot_task = dotted_tasks[len(dotted_tasks)-1]
         while True:
             choice = get_input(
                 f"Your current task is {latest_dot_task.name}. Have you "
                 f"completed it? (y)es or (n)o. (Press 'q' to quit)\n"
+                f"(Note - this doesn't interface with Todoist yet)"
                 ).strip().lower()
             if choice in ("y", "n"):
                 break
@@ -181,11 +183,34 @@ def main():
     # Any time: save (including update Todoist) and quit, save without quit, or quit without saving
 
     tasks: list[Task] = [
-    Task("Wrestle a bear",id=23),
-    Task("Write a review of North & South",id=54),
-    Task("Solve world peace",id=654),
-    Task("Have a nap",id=654654),
-    Task("Become a mighty pirate",id=4987)    
+    Task('Wash bedding'),
+    Task('Vacuum purifier'),
+    Task('Buy more antihistamines'),
+    Task('Buy pin backs'),
+    Task('Write some fic'),
+    Task('Quick win - transfer some money to vanguard'),
+    Task('Do some coding on autofocus'),
+    Task('Cool box to garage'),
+    Task('Put spare bedding in loft'),
+    Task('Clear the bedding box so we can get to the bedding'),
+    Task('Hoover side of bed'),
+    Task('🪣 Clear the bath edge & shower toiletries (10 min)'),
+    Task('Change virgin contract'),
+    Task('Handwash socks'),
+    Task('Fix shirt button'),
+    Task('Defrost freezer'),
+    Task('Sort mums computer'),
+    Task('Fix clock'),
+    Task('Draft email to adhd partridge in wantage'),
+    Task('gardening'),
+    Task('Cut blind for study'),
+    Task('Email Quakers to swap gift aid'),
+    Task('Email Quakers to check in'),
+    Task('Prepare study window for blinds'),
+    Task('Change bulb in bathroom'),
+    Task('Do some wazzard'),
+    Task('Do some crochet'),
+    Task('Squiggly careers chapter 1')
     ]
     
     latest_completed_task = None
