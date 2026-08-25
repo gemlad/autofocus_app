@@ -1,6 +1,7 @@
 import sys
 
 from task import Task
+from todoist_client import get_filter_tasks
 
 tasks: list[Task] = []
 
@@ -163,48 +164,26 @@ def task_complete(tasks):
 def main():
     print("\n\n     AutoFocus App\n\n")
 
-    # Load json tasks
+## Hardcoded task-list for testing
+    # tasks: list[Task] = [
+    # Task('Wash bedding'),
+    # Task('Vacuum purifier'),
+    # Task('Buy more antihistamines'),
+    # Task('Buy pin backs'),
+    # Task('Write some fic'),
+    # Task('Quick win - transfer some money to vanguard'),
+    # Task('Do some coding on autofocus'),
+    # Task('Cool box to garage'),
+    # Task('Put spare bedding in loft'),
+    # Task('Clear the bedding box so we can get to the bedding'),
+    # Task('Hoover side of bed'),
+    # Task('🪣 Clear the bath edge & shower toiletries (10 min)'),
+    # ]
 
-    # Poll Todoist - compare, add new tasks to app task list, update completed tasks in app task list
-    # Compare tasks
-    # Show task to complete
-    # Complete task
-    # Update todoist
-
-    #rerun from poll Todoist.
-
-    # Any time: save (including update Todoist) and quit, save without quit, or quit without saving
-
-    tasks: list[Task] = [
-    Task('Wash bedding'),
-    Task('Vacuum purifier'),
-    Task('Buy more antihistamines'),
-    Task('Buy pin backs'),
-    Task('Write some fic'),
-    Task('Quick win - transfer some money to vanguard'),
-    Task('Do some coding on autofocus'),
-    Task('Cool box to garage'),
-    Task('Put spare bedding in loft'),
-    Task('Clear the bedding box so we can get to the bedding'),
-    Task('Hoover side of bed'),
-    Task('🪣 Clear the bath edge & shower toiletries (10 min)'),
-    Task('Change virgin contract'),
-    Task('Handwash socks'),
-    Task('Fix shirt button'),
-    Task('Defrost freezer'),
-    Task('Sort mums computer'),
-    Task('Fix clock'),
-    Task('Draft email to adhd partridge in wantage'),
-    Task('gardening'),
-    Task('Cut blind for study'),
-    Task('Email Quakers to swap gift aid'),
-    Task('Email Quakers to check in'),
-    Task('Prepare study window for blinds'),
-    Task('Change bulb in bathroom'),
-    Task('Do some wazzard'),
-    Task('Do some crochet'),
-    Task('Squiggly careers chapter 1')
-    ]
+    try:
+        tasks = get_filter_tasks()
+    except RuntimeError as exc:
+        sys.exit(str(exc))
     
     latest_completed_task = None
     resume_from_task = tasks[0]
