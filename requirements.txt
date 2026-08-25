@@ -1,7 +1,7 @@
 # Autofocus App dependencies
 # Requires Python 3.10+ (main.py uses PEP 604 `X | None` type syntax)
 
-# Todoist REST/Sync API client - used by todoist_api.py to fetch tasks
+# Todoist REST/Sync API client - used by todoist_client.py to fetch tasks
 # from a Todoist filter. Pulls in `requests` as a transitive dependency.
 todoist-api-python>=4.0.0
 

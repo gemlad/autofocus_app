@@ -1,6 +1,6 @@
 """The Task record the whole app passes around.
 
-Lives in its own module so both `main.py` and `todoist_api.py` can import
+Lives in its own module so both `main.py` and `todoist_client.py` can import
 it. It can't live in main.py: running `python main.py` loads that file as
 `__main__`, so `from main import Task` elsewhere would load a *second*
 copy of main.py and re-run it.

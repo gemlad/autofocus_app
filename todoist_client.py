@@ -78,7 +78,7 @@ def get_filter_tasks(query: str | None = None) -> list[Task]:
 
 
 if __name__ == "__main__":
-    # Smoke test: `python todoist_api.py` proves the token is wired up.
+    # Smoke test: `python todoist_client.py` proves the token is wired up.
     # A missing token is a setup mistake, not a bug, so show the message
     # rather than a traceback.
     import sys
