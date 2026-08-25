@@ -1,13 +1,6 @@
 import sys
 
-from dataclasses import dataclass
-
-@dataclass
-class Task:
-    name: str
-    is_completed: bool = False
-    is_dotted: bool = False
-    id: int | None = None
+from task import Task
 
 tasks: list[Task] = []
 

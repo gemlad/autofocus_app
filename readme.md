@@ -17,3 +17,6 @@ Out of scope (for now):
 
 # Future plans:
 See project milestones
+
+# Statement of AI use
+I used Anthropic Claude to help me code things I was unsure of, but every line has been reviewed and tested by a human.
