@@ -24,14 +24,14 @@ def get_input(prompt):
 def quit_no_save(): # O says: quit(save = True) might be a good implementation
     while True:
         choice = input(
-            f"Are you sure you want to quit without saving?"
+            f"Are you sure you want to quit?"
             f"(y)es (to quit) or (n)o (don't quit)\n"
             ).strip().lower()
         if choice in ("y", "n"):
             break
         print("Please enter y (to quit) or n (don't quit)")
     if choice == "y":
-        sys.exit("Autofocus App terminated. Nothing was saved.")
+        sys.exit("Autofocus App terminated.")
 
 def find_task(tasks, task_id):
     task = next((t for t in tasks if t.id == task_id), None)
@@ -101,11 +101,11 @@ def task_compare(tasks, previous_dot_task = None, resume_from_task = None):
     # resume_from_task  - the task after latest_completed_task in `tasks`; where scanning resumes
     # If previous_dot_task is None (no earlier dot), restart from the top instead.
     print("Running task_compare...")
-    if previous_dot_task == None:
-        previous_dot_task = tasks[0]
-    previous_dot_task.is_dotted = True
     if resume_from_task == None:
         return
+    if previous_dot_task == None:
+        previous_dot_task = tasks[tasks.index(resume_from_task)]
+        previous_dot_task.is_dotted = True
     for task in tasks[tasks.index(resume_from_task):]:
         if task == previous_dot_task:
             continue
@@ -151,14 +151,8 @@ def task_complete(tasks):
             latest_dot_task.is_completed = True
             latest_completed_task = latest_dot_task
             return latest_completed_task
-    print("You have completed your tasks!")
-    quit_no_save()
-
-    # else: # needs more feature! Currently does not return anything
-    #     print("App terminated - do the task then run again!")
-
-
-
+    sys.exit("You have completed your tasks! Autofocus App terminated.")
+    
 
         
 
