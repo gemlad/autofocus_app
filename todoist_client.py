@@ -76,6 +76,33 @@ def get_filter_tasks(query: str | None = None) -> list[Task]:
     pages = api.filter_tasks(query=query) if query else api.get_tasks()
     return [to_task(task) for page in pages for task in page]
 
+def todoist_complete_task(task_id):
+    """For recurring tasks, this schedules the next occurrence. For 
+    non-recurring tasks, it marks them as completed.
+    This method is idempotent for non-recurring tasks (an action that can 
+    be performed multiple times without changing the final result beyond 
+    the initial application).
+    Recurring tasks with a [period]! in Todoist - idempotent.
+    Recurring tasks without the ! will tick over to the next instance every time.
+    """
+    api = get_api()
+    api.complete_task(task_id)
+
+# def todoist_complete_task(task_id: str) -> None:
+#     """Claude version"""
+#     try:
+#         get_api().complete_task(task_id)
+#     except httpx.HTTPStatusError as exc:
+#         status = exc.response.status_code
+#         # 404 -> the id isn't in Todoist at all: a bug in this app
+#         # 401 -> token is wrong or revoked: a setup problem
+#         # anything else -> Todoist's problem
+#         raise TodoistError(...) from exc
+#     except httpx.RequestError as exc:
+#         # never got a reply: no network, DNS, timeout
+#         raise TodoistError(...) from exc
+
+
 
 if __name__ == "__main__":
     # Smoke test: `python todoist_client.py` proves the token is wired up.
