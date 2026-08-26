@@ -5,10 +5,10 @@
 # from a Todoist filter and to complete them.
 todoist-api-python>=4.0.0
 
-# HTTP library underlying todoist-api-python. Listed explicitly because
-# todoist_client.py imports it directly to catch httpx.HTTPStatusError and
-# httpx.RequestError - a transitive dependency could change without warning.
-httpx>=0.28
+# # HTTP library underlying todoist-api-python. Listed explicitly because
+# # todoist_client.py imports it directly to catch httpx.HTTPStatusError and
+# # httpx.RequestError - a transitive dependency could change without warning.
+# httpx>=0.28
 
 # Loads the personal Todoist API token from a gitignored .env file
 python-dotenv>=1.0

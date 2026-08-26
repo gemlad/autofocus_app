@@ -2,6 +2,7 @@ import sys
 
 from task import Task
 from todoist_client import get_filter_tasks
+from todoist_client import todoist_complete_task
 
 tasks: list[Task] = []
 
@@ -141,12 +142,12 @@ def task_complete(tasks):
             choice = get_input(
                 f"Your current task is {latest_dot_task.name}. Have you "
                 f"completed it? (y)es or (n)o. (Press 'q' to quit)\n"
-                f"(Note - this doesn't interface with Todoist yet)"
                 ).strip().lower()
             if choice in ("y", "n"):
                 break
             print("Please enter y or n")
         if choice == "y":
+            todoist_complete_task(latest_dot_task.id)
             latest_dot_task.is_completed = True
             latest_completed_task = latest_dot_task
             return latest_completed_task
