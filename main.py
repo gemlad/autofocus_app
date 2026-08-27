@@ -3,6 +3,7 @@ import sys
 from task import Task
 from todoist_client import get_filter_tasks
 from todoist_client import todoist_complete_task
+from todoist_client import todoist_copy_task
 
 tasks: list[Task] = []
 
@@ -43,7 +44,6 @@ def update_tasks(tasks = []):
         x for x in tasks + todoist_tasks 
         if x.id not in seen and not seen.add(x.id)
         ] #adds new tasks from todoist
-
     tasks_ids = [x.id for x in tasks]
     todoist_tasks_ids = [x.id for x in todoist_tasks]
     completed = [x for x in tasks_ids if x not in todoist_tasks_ids]
@@ -51,7 +51,6 @@ def update_tasks(tasks = []):
         task = find_task(tasks, x)
         task.is_completed = True 
         #marks tasks completed in Todoist as completed in app
-
     return tasks
 
 
@@ -63,7 +62,6 @@ def find_task(tasks, task_id):
 
 def find_previous_dot_task(tasks, latest_completed_task=None):
     """ previous_dot_task is the dotted task before the latest completed task.
-
         Returns previous_dot_task from the task list.
     """
     if latest_completed_task == None:
@@ -73,7 +71,6 @@ def find_previous_dot_task(tasks, latest_completed_task=None):
         return(previous_dot_task)
     if latest_completed_task.is_completed == False:
         raise ValueError(f"{latest_completed_task.name} has not been completed.")
-
     for task in tasks[tasks.index(latest_completed_task) -1::-1]:
         if task.is_completed == True:
             continue
@@ -111,6 +108,7 @@ def find_resume_from_task(tasks, latest_completed_task = None):
             raise ValueError(f"Task {task.name} metadata corrupted")
     resume_from_task = None
     return(resume_from_task)
+
 
 def task_compare(tasks, previous_dot_task = None, resume_from_task = None):
     """ Compares a comparator task with the next suitable task.
@@ -159,16 +157,27 @@ def task_complete(tasks):
         while True:
             choice = get_input(
                 f"Your current task is {latest_dot_task.name}. Have you "
-                f"completed it? (y)es or (n)o. (Press 'q' to quit)\n"
+                f"completed it? \n"
+                f"C for fully completed\n"
+                f"N for not completed\n"
+                f"P for partially completed\n"
+                f"Q to quit\n"
                 ).strip().lower()
-            if choice in ("y", "n"):
+            if choice in ("y", "n", "p"):
                 break
-            print("Please enter y or n")
-        if choice == "y":
-            todoist_complete_task(latest_dot_task.id)
-            latest_dot_task.is_completed = True
-            latest_completed_task = latest_dot_task
-            return latest_completed_task
+            print("Please enter y, n or p (q to quit)\n")
+        if choice == "n":
+            ## TODO: add choices
+            continue
+        if choice == "p":
+            todoist_copy_task(latest_dot_task.id)
+
+        todoist_complete_task(latest_dot_task.id)
+        latest_dot_task.is_completed = True
+        latest_completed_task = latest_dot_task
+        return latest_completed_task
+        
+
     sys.exit("You have completed your tasks! Autofocus App terminated.")
     
 
