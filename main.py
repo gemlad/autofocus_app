@@ -33,6 +33,16 @@ def quit_no_save(): # O says: quit(save = True) might be a good implementation
     if choice == "y":
         sys.exit("Autofocus App terminated.")
 
+def update_tasks(tasks = []):
+    try:
+        new_tasks = get_filter_tasks()
+    except RuntimeError as exc:
+        sys.exit(str(exc))
+    seen = set()  
+    updated_tasks = [x for x in tasks + new_tasks if x.id not in seen and not seen.add(x.id)] #adds new tasks from todoist
+    return updated_tasks
+
+
 def find_task(tasks, task_id):
     task = next((t for t in tasks if t.id == task_id), None)
     if task is None:
@@ -65,8 +75,8 @@ def find_previous_dot_task(tasks, latest_completed_task=None):
     
 
 def find_resume_from_task(tasks, latest_completed_task = None):
-    """ resume_from_task is the next uncompleted, undotted task on the list after the latest completed task.
-        
+    """ resume_from_task is the next uncompleted, undotted task on the list
+        after the latest completed task.
         Returns resume_from_task from the task list. 
     """
     if latest_completed_task == None:
@@ -175,15 +185,14 @@ def main():
     # Task('🪣 Clear the bath edge & shower toiletries (10 min)'),
     # ]
 
-    try:
-        tasks = get_filter_tasks()
-    except RuntimeError as exc:
-        sys.exit(str(exc))
-    
+
+    tasks = []
     latest_completed_task = None
-    resume_from_task = tasks[0]
+    resume_from_task = None
+
     
     while True:
+        tasks = update_tasks(tasks)
         previous_dot_task = find_previous_dot_task(tasks, latest_completed_task)
         resume_from_task = find_resume_from_task(tasks, latest_completed_task)
         task_compare(tasks, previous_dot_task = previous_dot_task, resume_from_task = resume_from_task)
