@@ -25,8 +25,9 @@ def get_input(prompt):
 def quit_no_save(): # O says: quit(save = True) might be a good implementation
     while True:
         choice = input(
-            f"Are you sure you want to quit?"
-            f"(y)es (to quit) or (n)o (don't quit)\n"
+            f"Are you sure you want to quit?\n"
+            f"Y - quit\n"
+            f"N - don't quit\n"
             ).strip().lower()
         if choice in ("y", "n"):
             break
@@ -136,12 +137,14 @@ def task_compare(tasks, previous_dot_task = None, resume_from_task = None):
             continue
         while True:
             choice = get_input(
-                f"Would you rather: 1. {previous_dot_task.name}, "
-                f"or: 2. {task.name}? (Press 'q' to quit)\n"
+                f"Would you rather: \n"
+                f"1. {previous_dot_task.name}, or\n"
+                f"2. {task.name}?\n"
+                f"(Q to quit)\n"
                 )
             if choice in ("1", "2"):
                 break
-            print("Please enter 1 or 2. (Press 'q' to quit)")
+            print("\nPlease enter 1 or 2. (Q to quit)")
         if choice == "2":
             task.is_dotted = True
             previous_dot_task = task
@@ -163,13 +166,13 @@ def task_complete(tasks):
         while True:
             choice = get_input(
                 f"Your current task is {latest_dot_task.name}. Have you "
-                f"completed it? \n"
-                f"C for fully completed\n"
+                f"completed it? \n\n"
+                f"C or Y for fully completed\n"
                 f"N for not completed\n"
                 f"P for partially completed\n"
                 f"Q to quit\n"
                 ).strip().lower()
-            if choice in ("c", "n", "p"):
+            if choice in ("c", "y", "n", "p"):
                 break
             print("Please enter c, n or p (q to quit)\n")
         if choice == "n":
