@@ -25,7 +25,7 @@ def get_input(prompt):
 def quit_no_save(): # O says: quit(save = True) might be a good implementation
     while True:
         choice = input(
-            f"Are you sure you want to quit?\n"
+            f"\nAre you sure you want to quit?\n"
             f"Y - quit\n"
             f"N - don't quit\n"
             ).strip().lower()
@@ -165,7 +165,7 @@ def task_complete(tasks):
         latest_dot_task = dotted_tasks[len(dotted_tasks)-1]
         while True:
             choice = get_input(
-                f"Your current task is {latest_dot_task.name}. Have you "
+                f"\nYour current task is {latest_dot_task.name}. Have you "
                 f"completed it? \n\n"
                 f"C or Y for fully completed\n"
                 f"N for not completed\n"
@@ -189,7 +189,7 @@ def task_complete(tasks):
         return latest_completed_task
         
 
-    sys.exit("You have completed your tasks! Autofocus App terminated.")
+    sys.exit("\nYou have completed your tasks! Autofocus App terminated.")
     
         
 
