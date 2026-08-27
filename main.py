@@ -137,7 +137,7 @@ def task_compare(tasks, previous_dot_task = None, resume_from_task = None):
             continue
         while True:
             choice = get_input(
-                f"Would you rather: \n"
+                f"\nWould you rather: \n"
                 f"1. {previous_dot_task.name}, or\n"
                 f"2. {task.name}?\n"
                 f"(Q to quit)\n"
