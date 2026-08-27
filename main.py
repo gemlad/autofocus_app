@@ -35,12 +35,24 @@ def quit_no_save(): # O says: quit(save = True) might be a good implementation
 
 def update_tasks(tasks = []):
     try:
-        new_tasks = get_filter_tasks()
+        todoist_tasks = get_filter_tasks()
     except RuntimeError as exc:
         sys.exit(str(exc))
     seen = set()  
-    updated_tasks = [x for x in tasks + new_tasks if x.id not in seen and not seen.add(x.id)] #adds new tasks from todoist
-    return updated_tasks
+    tasks = [
+        x for x in tasks + todoist_tasks 
+        if x.id not in seen and not seen.add(x.id)
+        ] #adds new tasks from todoist
+
+    tasks_ids = [x.id for x in tasks]
+    todoist_tasks_ids = [x.id for x in todoist_tasks]
+    completed = [x for x in tasks_ids if x not in todoist_tasks_ids]
+    for x in completed:
+        task = find_task(tasks, x)
+        task.is_completed = True 
+        #marks tasks completed in Todoist as completed in app
+
+    return tasks
 
 
 def find_task(tasks, task_id):
@@ -106,10 +118,6 @@ def task_compare(tasks, previous_dot_task = None, resume_from_task = None):
 
         Doesn't return anything but changes the tasks' metadata in the list
     """
-    # TODO: resume comparing after completion. Agreed names:
-    # previous_dot_task - the dot before latest_completed_task; becomes the new comparator
-    # resume_from_task  - the task after latest_completed_task in `tasks`; where scanning resumes
-    # If previous_dot_task is None (no earlier dot), restart from the top instead.
     print("Running task_compare...")
     if resume_from_task == None:
         return
@@ -168,23 +176,6 @@ def task_complete(tasks):
 
 def main():
     print("\n\n     AutoFocus App\n\n")
-
-## Hardcoded task-list for testing
-    # tasks: list[Task] = [
-    # Task('Wash bedding'),
-    # Task('Vacuum purifier'),
-    # Task('Buy more antihistamines'),
-    # Task('Buy pin backs'),
-    # Task('Write some fic'),
-    # Task('Quick win - transfer some money to vanguard'),
-    # Task('Do some coding on autofocus'),
-    # Task('Cool box to garage'),
-    # Task('Put spare bedding in loft'),
-    # Task('Clear the bedding box so we can get to the bedding'),
-    # Task('Hoover side of bed'),
-    # Task('🪣 Clear the bath edge & shower toiletries (10 min)'),
-    # ]
-
 
     tasks = []
     latest_completed_task = None
