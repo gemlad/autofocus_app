@@ -25,8 +25,9 @@ def get_input(prompt):
 def quit_no_save(): # O says: quit(save = True) might be a good implementation
     while True:
         choice = input(
-            f"Are you sure you want to quit?"
-            f"(y)es (to quit) or (n)o (don't quit)\n"
+            f"Are you sure you want to quit?\n"
+            f"Y - quit\n"
+            f"N - don't quit\n"
             ).strip().lower()
         if choice in ("y", "n"):
             break
@@ -64,26 +65,33 @@ def find_previous_dot_task(tasks, latest_completed_task=None):
     """ previous_dot_task is the dotted task before the latest completed task.
         Returns previous_dot_task from the task list.
     """
+    previous_dot_task = tasks[0]
     if latest_completed_task == None:
-        # TODO: sort out edge case
-        # raise ValueError("No latest_completed_task")
-        previous_dot_task = None
-        return(previous_dot_task)
-    if latest_completed_task.is_completed == False:
+        for task in tasks[::-1]:
+            if task.is_completed == True:
+                continue
+            if task.is_dotted == False:
+                continue
+            if task.is_dotted == True:
+                previous_dot_task = task
+                return previous_dot_task
+    elif latest_completed_task.is_completed == False:
         raise ValueError(f"{latest_completed_task.name} has not been completed.")
-    for task in tasks[tasks.index(latest_completed_task) -1::-1]:
-        if task.is_completed == True:
-            continue
-        elif task.is_completed == False and task.is_dotted == False:
-            continue
-        elif task.is_completed == False and task.is_dotted == True:
-            previous_dot_task = task
-            return(previous_dot_task)
-        else:
-            raise ValueError(f"Task {task.name} metadata corrupted")
+    elif latest_completed_task.is_completed == True:
+        for task in tasks[tasks.index(latest_completed_task) -1::-1]:
+            if task.is_completed == True:
+                continue
+            elif task.is_completed == False and task.is_dotted == False:
+                continue
+            elif task.is_completed == False and task.is_dotted == True:
+                previous_dot_task = task
+                return(previous_dot_task)
+            else:
+                raise ValueError(f"Task {task.name} metadata corrupted")
+    return previous_dot_task
     
 
-def find_resume_from_task(tasks, latest_completed_task = None):
+def find_resume_from_task(tasks, latest_completed_task = None, previous_dot_task = None):
     """ resume_from_task is the next uncompleted, undotted task on the list
         after the latest completed task.
         Returns resume_from_task from the task list. 
@@ -91,7 +99,7 @@ def find_resume_from_task(tasks, latest_completed_task = None):
     if latest_completed_task == None:
         # TODO: sort out edge case
         # raise ValueError("No latest_completed_task")
-        resume_from_task = tasks[0]
+        resume_from_task = tasks[tasks.index(previous_dot_task)+1]
         return(resume_from_task)
     if latest_completed_task.is_completed == False:
         raise ValueError(f"{latest_completed_task.name} has not been completed.")
@@ -129,16 +137,17 @@ def task_compare(tasks, previous_dot_task = None, resume_from_task = None):
             continue
         while True:
             choice = get_input(
-                f"Would you rather: 1. {previous_dot_task.name}, "
-                f"or: 2. {task.name}? (Press 'q' to quit)\n"
+                f"Would you rather: \n"
+                f"1. {previous_dot_task.name}, or\n"
+                f"2. {task.name}?\n"
+                f"(Q to quit)\n"
                 )
             if choice in ("1", "2"):
                 break
-            print("Please enter 1 or 2. (Press 'q' to quit)")
+            print("\nPlease enter 1 or 2. (Q to quit)")
         if choice == "2":
             task.is_dotted = True
             previous_dot_task = task
-
 
 def task_complete(tasks):
     """Shows the task ready to be completed, and if the user inputs that they have completed it, 
@@ -157,18 +166,20 @@ def task_complete(tasks):
         while True:
             choice = get_input(
                 f"Your current task is {latest_dot_task.name}. Have you "
-                f"completed it? \n"
-                f"C for fully completed\n"
+                f"completed it? \n\n"
+                f"C or Y for fully completed\n"
                 f"N for not completed\n"
                 f"P for partially completed\n"
                 f"Q to quit\n"
                 ).strip().lower()
-            if choice in ("y", "n", "p"):
+            if choice in ("c", "y", "n", "p"):
                 break
-            print("Please enter y, n or p (q to quit)\n")
+            print("Please enter c, n or p (q to quit)\n")
         if choice == "n":
             ## TODO: add choices
-            continue
+            print("Finding a different task...")
+            latest_dot_task.is_dotted = False
+            return
         if choice == "p":
             todoist_copy_task(latest_dot_task.id)
 
@@ -180,7 +191,6 @@ def task_complete(tasks):
 
     sys.exit("You have completed your tasks! Autofocus App terminated.")
     
-
         
 
 def main():
@@ -192,11 +202,26 @@ def main():
 
     
     while True:
-        tasks = update_tasks(tasks)
-        previous_dot_task = find_previous_dot_task(tasks, latest_completed_task)
-        resume_from_task = find_resume_from_task(tasks, latest_completed_task)
-        task_compare(tasks, previous_dot_task = previous_dot_task, resume_from_task = resume_from_task)
-        latest_completed_task = task_complete(tasks)
+        tasks = update_tasks(
+            tasks
+            )
+        previous_dot_task = find_previous_dot_task(
+            tasks, 
+            latest_completed_task
+            )
+        resume_from_task = find_resume_from_task(
+            tasks, 
+            latest_completed_task, 
+            previous_dot_task
+            )
+        task_compare(
+            tasks, 
+            previous_dot_task = previous_dot_task, 
+            resume_from_task = resume_from_task
+            )
+        latest_completed_task = task_complete(
+            tasks
+            )
 
 ## Testing code
     # for task in tasks:
