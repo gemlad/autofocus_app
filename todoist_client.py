@@ -88,34 +88,33 @@ def todoist_complete_task(task_id):
     api = get_api()
     api.complete_task(task_id)
 
-# def todoist_complete_task(task_id: str) -> None:
-#     """Claude version"""
-#     try:
-#         get_api().complete_task(task_id)
-#     except httpx.HTTPStatusError as exc:
-#         status = exc.response.status_code
-#         # 404 -> the id isn't in Todoist at all: a bug in this app
-#         # 401 -> token is wrong or revoked: a setup problem
-#         # anything else -> Todoist's problem
-#         raise TodoistError(...) from exc
-#     except httpx.RequestError as exc:
-#         # never got a reply: no network, DNS, timeout
-#         raise TodoistError(...) from exc
+def todoist_copy_task(task_id):
+    """Creates a duplicate of a task in Todoist."""
+    api = get_api()
+    task = api.get_task(task_id)
+    new_task = api.add_task(
+        task.content, 
+        description=task.description,
+        project_id=task.project_id,
+        section_id=task.section_id, 
+        parent_id=task.parent_id, 
+        labels=task.labels, 
+        priority=task.priority, 
+        due_string=task.due.string if task.due else None,
+        duration=task.duration.amount if task.duration else None,
+        duration_unit=task.duration.unit if task.duration else None, 
+        assignee_id=task.assignee_id,
+        order=task.order, 
+        deadline_date=task.deadline.date if task.deadline else None)
+    return new_task.id
 
+# if __name__ == "__main__":
+   
+#     # task_id = "6hMvJ6c573m36RC3"
+#     # api = get_api()
+#     # task = api.get_task(task_id)
+#     # print("Original task: ", task)
+#     # copied_task_id = todoist_copy_task(task_id)
+#     # new_task = api.get_task(copied_task_id)
+#     # print("New task: ", new_task)
 
-
-if __name__ == "__main__":
-    # Smoke test: `python todoist_client.py` proves the token is wired up.
-    # A missing token is a setup mistake, not a bug, so show the message
-    # rather than a traceback.
-    import sys
-
-    try:
-        tasks = get_filter_tasks()
-    except RuntimeError as exc:
-        sys.exit(str(exc))
-    print(f"Token works. {len(tasks)} active task(s) found.")
-    for task in tasks[:5]:
-        due = task.due_date or "no due date"
-        recurring = ", recurring" if task.is_recurring else ""
-        print(f"  - {task.name} [{task.id}] ({due}{recurring})")
